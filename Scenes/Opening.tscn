@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dujma8llobgjr"]
+
+[ext_resource type="Texture2D" uid="uid://cp43qkvjnp83j" path="res://Art/Opening.png" id="1_laf7e"]
+[ext_resource type="Texture2D" uid="uid://bs122tc0ax664" path="res://Art/Boot.png" id="2_76xge"]
+
+[node name="Opening" type="Node2D"]
+
+[node name="Opening" type="Sprite2D" parent="."]
+position = Vector2(320, 180)
+texture = ExtResource("1_laf7e")
+
+[node name="Boot" type="Sprite2D" parent="."]
+position = Vector2(320, 180)
+texture = ExtResource("2_76xge")
