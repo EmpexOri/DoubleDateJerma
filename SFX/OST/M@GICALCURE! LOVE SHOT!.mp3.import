@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c10hm3tv5ui5h"
+path="res://.godot/imported/M@GICALCURE! LOVE SHOT!.mp3-a326cac1b7a4d59f54288eb5918a4f50.mp3str"
+
+[deps]
+
+source_file="res://SFX/OST/M@GICALCURE! LOVE SHOT!.mp3"
+dest_files=["res://.godot/imported/M@GICALCURE! LOVE SHOT!.mp3-a326cac1b7a4d59f54288eb5918a4f50.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
