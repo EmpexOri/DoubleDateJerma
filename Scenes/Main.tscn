@@ -1,3 +1,14 @@
-[gd_scene format=3 uid="uid://30utc3at4owp"]
+[gd_scene load_steps=3 format=3 uid="uid://30utc3at4owp"]
+
+[ext_resource type="Texture2D" uid="uid://c0kgmiydslua7" path="res://Art/Character/wp_sunset.png" id="1_idj7w"]
+[ext_resource type="Texture2D" uid="uid://vagnyei7uiaw" path="res://Art/Character/Katlyn-Base.png" id="1_r150o"]
 
 [node name="Node2D" type="Node2D"]
+
+[node name="WpSunset" type="Sprite2D" parent="."]
+position = Vector2(320, 180)
+texture = ExtResource("1_idj7w")
+
+[node name="Katlyn-base" type="Sprite2D" parent="."]
+position = Vector2(320, 232)
+texture = ExtResource("1_r150o")
