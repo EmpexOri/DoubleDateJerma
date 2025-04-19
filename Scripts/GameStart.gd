@@ -35,4 +35,4 @@ func _on_13_seconds():
 	delete_player.play()
 
 func _on_16_seconds():
-	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
+	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
