@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="DoubleDateJerma"
-run/main_scene="uid://dujma8llobgjr"
+run/main_scene="uid://c23g57q8jgjsd"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+ScoresManager="*res://Scripts/ScoresManager.gd"
 
 [display]
 
