@@ -101,6 +101,17 @@ layout_mode = 2
 [node name="9" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
 layout_mode = 2
 
+[node name="ComboLabel" type="Label" parent="GameManager/CanvasLayer/Player2UI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("4_rgh2o")
+theme_override_font_sizes/font_size = 12
+
 [node name="Player1UI" type="Panel" parent="GameManager/CanvasLayer"]
 offset_right = 200.0
 offset_bottom = 360.0
@@ -176,18 +187,37 @@ layout_mode = 2
 [node name="9" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
 layout_mode = 2
 
-[node name="MiddleTextLabel" type="Label" parent="GameManager/CanvasLayer"]
+[node name="ComboLabel" type="Label" parent="GameManager/CanvasLayer/Player1UI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("4_rgh2o")
+theme_override_font_sizes/font_size = 12
+
+[node name="MiddleTextPanel" type="Panel" parent="GameManager/CanvasLayer"]
+offset_left = 205.0
+offset_top = 295.0
+offset_right = 435.0
+offset_bottom = 355.0
+
+[node name="MiddleTextLabel" type="Label" parent="GameManager/CanvasLayer/MiddleTextPanel"]
+layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -115.0
-offset_top = -67.0
-offset_right = 115.0
-offset_bottom = -5.0
+offset_left = -105.0
+offset_top = -58.0
+offset_right = 105.0
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
+pivot_offset = Vector2(105, 0)
 theme_override_fonts/font = ExtResource("4_rgh2o")
 theme_override_font_sizes/font_size = 10
 

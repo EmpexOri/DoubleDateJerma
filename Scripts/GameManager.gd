@@ -27,13 +27,23 @@ var scores = {
 }
 
 var timers = {
-	1: 5.0,
-	2: 5.0
+	1: 125.0,
+	2: 125.0
 }
 
 var success_counts = {
 	1: 0,
 	2: 0
+}
+
+var combo_counts = {
+	1: 0,
+	2: 0
+}
+
+var combo_multipliers = {
+	1: 1,
+	2: 1
 }
 
 var quotes = [
@@ -53,12 +63,15 @@ var voice_lines = [
 @onready var player1_ui = $CanvasLayer/Player1UI
 @onready var player2_ui = $CanvasLayer/Player2UI
 
+@onready var combo_label_1 = player1_ui.get_node("ComboLabel")
+@onready var combo_label_2 = player2_ui.get_node("ComboLabel")
+
 @onready var correct_sound_player_1 = player1_ui.get_node("CorrectSoundPlayer")
 @onready var wrong_sound_player_1 = player1_ui.get_node("WrongSoundPlayer")
 @onready var correct_sound_player_2 = player2_ui.get_node("CorrectSoundPlayer")
 @onready var wrong_sound_player_2 = player2_ui.get_node("WrongSoundPlayer")
 
-@onready var middle_text_label = $CanvasLayer/MiddleTextLabel
+@onready var middle_text_label = $CanvasLayer/MiddleTextPanel/MiddleTextLabel
 @onready var voice_player = $VoicePlayer
 
 var game_timer = GAME_TIME_LIMIT  # Game timer initialized to 201 seconds
@@ -104,6 +117,13 @@ func update_ui():
 
 	player2_ui.get_node("TimerLabel").text = "Time: " + str(round_decimal(timers[2]))
 	player2_ui.get_node("ScoreLabel").text = "Score: " + str(scores[2])
+	
+	combo_label_1.text = "Combo x" + str(combo_multipliers[1])
+	combo_label_2.text = "Combo x" + str(combo_multipliers[2])
+	
+	# Visual feedback based on multiplier strength
+	combo_label_1.modulate = get_combo_color(combo_multipliers[1])
+	combo_label_2.modulate = get_combo_color(combo_multipliers[2])
 
 func update_player_ui(ui_node: Node, player: int, inputs: Array):
 	var sequence_box = ui_node.get_node("SequenceBox")
@@ -178,19 +198,34 @@ func handle_input(player, input_str):
 	if player_inputs[player].size() == current_sequence[player].size():
 		# Sequence complete, check if the entire sequence is correct
 		if player_inputs[player] == current_sequence[player]:
-			scores[player] += 10
+			# Increase combo count
+			combo_counts[player] += 1
+
+			# Enable scaling multipliers
+			if combo_counts[player] >= 9:
+				combo_multipliers[player] = 4
+			elif combo_counts[player] >= 6:
+				combo_multipliers[player] = 3
+			elif combo_counts[player] >= 3:
+				combo_multipliers[player] = 2
+			else:
+				combo_multipliers[player] = 1
+
+			# Apply score with multiplier
+			scores[player] += 10 * combo_multipliers[player]
 			timers[player] += 2.5  # Bonus time
 			success_counts[player] += 1
 
 			var extra_length = int(success_counts[player] / 5)
 			generate_new_sequence(SEQUENCE_LENGTH + extra_length, player)
-			
-			# Play correct sound after completing sequence
+
 			play_sound(player, "correct")
-			# Update the middle text and play voice line after completing sequence
 			update_middle_text_and_voice_line()
 		else:
-			# Play wrong sound after completing sequence
+			# Wrong sequence resets combo
+			combo_counts[player] = 0
+			combo_multipliers[player] = 1
+
 			play_sound(player, "wrong")
 
 		player_inputs[player].clear()
@@ -258,6 +293,14 @@ func end_game():
 	# Transition to Main Menu after a short delay
 	await get_tree().create_timer(2.0).timeout
 	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
+	
+func get_combo_color(multiplier: int) -> Color:
+	match multiplier:
+		1: return Color(1, 1, 1)
+		2: return Color(1, 0.8, 0.2)
+		3: return Color(1, 0.5, 0.1)
+		4: return Color(1, 0.2, 0.1)
+		_: return Color(1, 1, 1)
 
 func round_decimal(value: float, places: int = 1) -> float:
 	var factor = pow(10, places)
