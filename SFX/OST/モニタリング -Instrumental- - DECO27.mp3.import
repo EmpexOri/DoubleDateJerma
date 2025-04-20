@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dulusriw1oaru"
+path="res://.godot/imported/モニタリング -Instrumental- - DECO27.mp3-82d80993627a48a2ff7ee42246905137.mp3str"
+
+[deps]
+
+source_file="res://SFX/OST/モニタリング -Instrumental- - DECO27.mp3"
+dest_files=["res://.godot/imported/モニタリング -Instrumental- - DECO27.mp3-82d80993627a48a2ff7ee42246905137.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

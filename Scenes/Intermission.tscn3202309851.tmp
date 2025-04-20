@@ -1,0 +1,67 @@
+[gd_scene load_steps=4 format=3 uid="uid://t6kikw0dbe12"]
+
+[ext_resource type="Script" uid="uid://cx61dcpadygku" path="res://Scripts/Intermission.gd" id="1_4nnvh"]
+[ext_resource type="FontFile" uid="uid://82qj0rpumxrm" path="res://Art/04B_08__.TTF" id="1_k0l3i"]
+[ext_resource type="AudioStream" uid="uid://dwcla4ydvxwwn" path="res://SFX/OST/モニタリングIntermission.mp3" id="3_llvhf"]
+
+[node name="Intermission" type="Node2D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("1_4nnvh")
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("1_k0l3i")
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player1Controls" type="Label" parent="CanvasLayer"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 40.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_k0l3i")
+theme_override_font_sizes/font_size = 16
+
+[node name="CountdownLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_k0l3i")
+theme_override_font_sizes/font_size = 16
+
+[node name="Player2Controls" type="Label" parent="CanvasLayer"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_k0l3i")
+theme_override_font_sizes/font_size = 16
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_llvhf")
+autoplay = true

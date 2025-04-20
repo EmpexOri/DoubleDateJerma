@@ -1,14 +1,15 @@
-[gd_scene load_steps=10 format=3 uid="uid://30utc3at4owp"]
+[gd_scene load_steps=11 format=3 uid="uid://30utc3at4owp"]
 
 [ext_resource type="Texture2D" uid="uid://c0kgmiydslua7" path="res://Art/Character/wp_sunset.png" id="1_idj7w"]
 [ext_resource type="Texture2D" uid="uid://vagnyei7uiaw" path="res://Art/Character/Katlyn-Base.png" id="1_r150o"]
+[ext_resource type="Texture2D" uid="uid://d3ly8p6pqcmn5" path="res://Art/Character/Vivianna1.png" id="3_bmxlf"]
 [ext_resource type="Script" uid="uid://ci5tfov1n0otd" path="res://Scripts/GameManager.gd" id="3_kln2b"]
 [ext_resource type="FontFile" uid="uid://82qj0rpumxrm" path="res://Art/04B_08__.TTF" id="4_rgh2o"]
 [ext_resource type="AudioStream" uid="uid://wkjk6mi4dxqs" path="res://SFX/FX/correct_player2.wav" id="5_jw32o"]
 [ext_resource type="AudioStream" uid="uid://dowyp57um7kg4" path="res://SFX/FX/wrong_player2.wav" id="6_50glp"]
 [ext_resource type="AudioStream" uid="uid://dcv5o6fhds57v" path="res://SFX/FX/correct_player1.wav" id="7_vy5pj"]
 [ext_resource type="AudioStream" uid="uid://bvsvyotnen0gl" path="res://SFX/FX/wrong_player1.wav" id="8_50glp"]
-[ext_resource type="AudioStream" uid="uid://c10hm3tv5ui5h" path="res://SFX/OST/M@GICALCURE! LOVE SHOT!.mp3" id="9_vy5pj"]
+[ext_resource type="AudioStream" uid="uid://be7wcljqleyek" path="res://SFX/OST/モニタリング-Gameplay.mp3" id="10_bmxlf"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -18,8 +19,13 @@ scale = Vector2(1, 0.8)
 texture = ExtResource("1_idj7w")
 
 [node name="Katlyn-base" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(320, 232)
 texture = ExtResource("1_r150o")
+
+[node name="Vivianna1" type="Sprite2D" parent="."]
+position = Vector2(320, 232)
+texture = ExtResource("3_bmxlf")
 
 [node name="GameManager" type="Node2D" parent="."]
 script = ExtResource("3_kln2b")
@@ -223,6 +229,9 @@ theme_override_font_sizes/font_size = 10
 
 [node name="VoicePlayer" type="AudioStreamPlayer2D" parent="GameManager"]
 
+[node name="AnnouncerPlayer" type="AudioStreamPlayer2D" parent="GameManager"]
+
 [node name="Music" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("9_vy5pj")
+stream = ExtResource("10_bmxlf")
 autoplay = true
+parameters/looping = true

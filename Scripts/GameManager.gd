@@ -27,8 +27,8 @@ var scores = {
 }
 
 var timers = {
-	1: 125.0,
-	2: 125.0
+	1: 10.0,
+	2: 10.0
 }
 
 var success_counts = {
@@ -59,6 +59,8 @@ var voice_lines = [
 	"res://SFX/FX/VoiceLines/nice_move.wav",
 	"res://SFX/FX/VoiceLines/youre_on_fire.wav",
 ]
+
+@onready var announcer_player = $AnnouncerPlayer
 
 @onready var player1_ui = $CanvasLayer/Player1UI
 @onready var player2_ui = $CanvasLayer/Player2UI
@@ -201,7 +203,9 @@ func handle_input(player, input_str):
 			# Increase combo count
 			combo_counts[player] += 1
 
-			# Enable scaling multipliers
+			var prev_multiplier = combo_multipliers[player]
+
+			# Update combo multiplier based on streak
 			if combo_counts[player] >= 9:
 				combo_multipliers[player] = 4
 			elif combo_counts[player] >= 6:
@@ -210,6 +214,10 @@ func handle_input(player, input_str):
 				combo_multipliers[player] = 2
 			else:
 				combo_multipliers[player] = 1
+
+			# If the multiplier increased, play a voice line
+			if combo_multipliers[player] > prev_multiplier:
+				play_combo_voice_line(player)  # Pass the player as an argument
 
 			# Apply score with multiplier
 			scores[player] += 10 * combo_multipliers[player]
@@ -301,6 +309,25 @@ func get_combo_color(multiplier: int) -> Color:
 		3: return Color(1, 0.5, 0.1)
 		4: return Color(1, 0.2, 0.1)
 		_: return Color(1, 1, 1)
+		
+func play_combo_voice_line(player):
+	# Randomly select a combo voice line
+	var combo_voice_lines = [
+		"res://SFX/FX/Announcer/doublekill.mp3",
+		"res://SFX/FX/Announcer/hillcontrolled.mp3",
+		"res://SFX/FX/Announcer/killtacular.mp3",
+		"res://SFX/FX/Announcer/killfrenzy.mp3",
+		"res://SFX/FX/Announcer/Killimanjaro.mp3",
+		"res://SFX/FX/Announcer/killtrocity.mp3",
+	]
+
+	var random_index = randi() % combo_voice_lines.size()
+	var voice_line = combo_voice_lines[random_index]
+
+	# Load the corresponding voice line dynamically
+	var voice_stream = load(voice_line)
+	announcer_player.stream = voice_stream
+	announcer_player.play()
 
 func round_decimal(value: float, places: int = 1) -> float:
 	var factor = pow(10, places)

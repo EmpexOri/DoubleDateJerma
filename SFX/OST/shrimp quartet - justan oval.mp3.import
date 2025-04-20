@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cj5fnyt22qjy"
+path="res://.godot/imported/shrimp quartet - justan oval.mp3-2c007c9ce6946c4da62395503ce51080.mp3str"
+
+[deps]
+
+source_file="res://SFX/OST/shrimp quartet - justan oval.mp3"
+dest_files=["res://.godot/imported/shrimp quartet - justan oval.mp3-2c007c9ce6946c4da62395503ce51080.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

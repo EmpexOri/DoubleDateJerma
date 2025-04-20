@@ -24,4 +24,4 @@ func display_top_scores():
 		player_2_score_label.text = ""
 		
 func _on_start_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Intermission.tscn")
