@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://maig4fohrflj" path="res://Scripts/MainMenu.gd" id="1_8saeu"]
 [ext_resource type="FontFile" uid="uid://82qj0rpumxrm" path="res://Art/04B_08__.TTF" id="2_853f1"]
 [ext_resource type="Texture2D" uid="uid://bdm23u8e7dcoq" path="res://Art/HomeScreenGradient.png" id="3_8saeu"]
-[ext_resource type="AudioStream" uid="uid://cj5fnyt22qjy" path="res://SFX/OST/shrimp quartet - justan oval.mp3" id="4_ghw46"]
+[ext_resource type="AudioStream" uid="uid://b5ms4uf6womaq" path="res://SFX/OST/Mesmerizer.mp3" id="4_ghw46"]
 
 [node name="MainMenu" type="Node2D"]
 
