@@ -22,6 +22,19 @@ func display_top_scores():
 			player_2_score_label.text += str(i + 1) + ". " + str(ScoresManager.top_scores_player_2[i]) + "\n"
 	else:
 		player_2_score_label.text = ""
-		
+
+# Start button handler
 func _on_start_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Intermission.tscn")
+
+# Tutorial button handler
+func _on_tutorial_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/Tutorial.tscn")
+
+# Credits button handler
+func _on_credits_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/Credits.tscn")
+
+# Exit button handler
+func _on_exit_button_pressed() -> void:
+	get_tree().quit()

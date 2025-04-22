@@ -60,7 +60,23 @@ var voice_lines = [
 	"res://SFX/FX/VoiceLines/youre_on_fire.wav",
 ]
 
+var ViviannaPositiveSprites = [
+	"res://Art/Character/Vivianna/Vivianna.png",
+	"res://Art/Character/Vivianna/ViviannaHappy.png",
+	"res://Art/Character/Vivianna/ViviannaLove.png",
+	"res://Art/Character/Vivianna/ViviannaWink.png"
+]
+
+var ViviannaNegativeSprites = [
+	"res://Art/Character/Vivianna/Negatives/VivAnger.png",
+	"res://Art/Character/Vivianna/Negatives/VivBored.png",
+	"res://Art/Character/Vivianna/Negatives/VivSick.png",
+	"res://Art/Character/Vivianna/Negatives/VivTears.png",
+	"res://Art/Character/Vivianna/Negatives/VivUpset.png",
+]
+
 @onready var announcer_player = $AnnouncerPlayer
+@onready var vivianna_sprite = $CanvasLayer/Vivianna
 
 @onready var player1_ui = $CanvasLayer/Player1UI
 @onready var player2_ui = $CanvasLayer/Player2UI
@@ -228,6 +244,7 @@ func handle_input(player, input_str):
 			generate_new_sequence(SEQUENCE_LENGTH + extra_length, player)
 
 			play_sound(player, "correct")
+			update_vivianna_sprite(true)
 			update_middle_text_and_voice_line()
 		else:
 			# Wrong sequence resets combo
@@ -235,7 +252,7 @@ func handle_input(player, input_str):
 			combo_multipliers[player] = 1
 
 			play_sound(player, "wrong")
-
+			update_vivianna_sprite(false)
 		player_inputs[player].clear()
 		update_ui()
 
@@ -328,6 +345,14 @@ func play_combo_voice_line(player):
 	var voice_stream = load(voice_line)
 	announcer_player.stream = voice_stream
 	announcer_player.play()
+	
+func update_vivianna_sprite(success: bool):
+	var sprite_list = ViviannaPositiveSprites if success else ViviannaNegativeSprites
+	var random_index = randi() % sprite_list.size()
+	var sprite_path = sprite_list[random_index]
+
+	var sprite_texture = load(sprite_path)
+	vivianna_sprite.texture = sprite_texture
 
 func round_decimal(value: float, places: int = 1) -> float:
 	var factor = pow(10, places)

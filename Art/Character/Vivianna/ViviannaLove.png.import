@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3ly8p6pqcmn5"
-path="res://.godot/imported/Vivianna1.png-3c0647d2f115ff186dcbd094bada7bb9.ctex"
+uid="uid://cxaswiv16jrb1"
+path="res://.godot/imported/ViviannaLove.png-681acaa0824d615a400b8dfe9acc6d22.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Character/Vivianna1.png"
-dest_files=["res://.godot/imported/Vivianna1.png-3c0647d2f115ff186dcbd094bada7bb9.ctex"]
+source_file="res://Art/Character/Vivianna/ViviannaLove.png"
+dest_files=["res://.godot/imported/ViviannaLove.png-681acaa0824d615a400b8dfe9acc6d22.ctex"]
 
 [params]
 
