@@ -71,21 +71,6 @@ grow_vertical = 2
 theme_override_fonts/font = ExtResource("2_853f1")
 text = "Start Game"
 
-[node name="StartButton2" type="Button" parent="Control/CanvasLayer"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -62.0
-offset_top = -26.5
-offset_right = 62.0
-offset_bottom = 4.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("2_853f1")
-text = "Tutorial"
-
 [node name="StartButton3" type="Button" parent="Control/CanvasLayer"]
 anchors_preset = 8
 anchor_left = 0.5
@@ -93,9 +78,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -62.0
-offset_top = 6.5
+offset_top = -27.0
 offset_right = 62.0
-offset_bottom = 37.5
+offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("2_853f1")
@@ -108,9 +93,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -62.0
-offset_top = 39.5
+offset_top = 6.0
 offset_right = 62.0
-offset_bottom = 70.5
+offset_bottom = 37.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("2_853f1")
@@ -122,6 +107,5 @@ autoplay = true
 parameters/looping = true
 
 [connection signal="pressed" from="Control/CanvasLayer/StartButton" to="Control" method="_on_start_button_pressed"]
-[connection signal="pressed" from="Control/CanvasLayer/StartButton2" to="Control" method="_on_tutorial_button_pressed"]
 [connection signal="pressed" from="Control/CanvasLayer/StartButton3" to="Control" method="_on_credits_button_pressed"]
 [connection signal="pressed" from="Control/CanvasLayer/StartButton4" to="Control" method="_on_exit_button_pressed"]
