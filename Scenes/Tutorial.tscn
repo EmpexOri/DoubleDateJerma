@@ -1,0 +1,451 @@
+[gd_scene load_steps=11 format=3 uid="uid://bdgs1dc5060ym"]
+
+[ext_resource type="Texture2D" uid="uid://c0kgmiydslua7" path="res://Art/Character/wp_sunset.png" id="1_dlght"]
+[ext_resource type="Texture2D" uid="uid://vagnyei7uiaw" path="res://Art/Character/Katlyn-Base.png" id="2_8i65c"]
+[ext_resource type="Texture2D" uid="uid://d3ly8p6pqcmn5" path="res://Art/Character/Vivianna/Vivianna.png" id="4_sgy12"]
+[ext_resource type="FontFile" uid="uid://82qj0rpumxrm" path="res://Art/04B_08__.TTF" id="5_5gw1s"]
+[ext_resource type="AudioStream" uid="uid://wkjk6mi4dxqs" path="res://SFX/FX/correct_player2.wav" id="6_brn58"]
+[ext_resource type="AudioStream" uid="uid://dowyp57um7kg4" path="res://SFX/FX/wrong_player2.wav" id="7_fx2vl"]
+[ext_resource type="AudioStream" uid="uid://dcv5o6fhds57v" path="res://SFX/FX/correct_player1.wav" id="8_mqud2"]
+[ext_resource type="AudioStream" uid="uid://bvsvyotnen0gl" path="res://SFX/FX/wrong_player1.wav" id="9_sswaw"]
+[ext_resource type="AudioStream" uid="uid://dm6c413oy8eep" path="res://SFX/OST/モニタリングTutorial.mp3" id="10_dlght"]
+
+[sub_resource type="GDScript" id="GDScript_hxa32"]
+script/source = "extends Node
+
+const INPUT_OPTIONS = [\"A\", \"B\", \"Y\", \"X\"]
+const DISPLAY_MAP = {
+	\"A\": \"res://Art/Arrows/ArrowDown.png\",
+	\"B\": \"res://Art/Arrows/ArrowRight.png\",
+	\"Y\": \"res://Art/Arrows/ArrowUp.png\",
+	\"X\": \"res://Art/Arrows/ArrowLeft.png\"
+}
+const SEQUENCE_LENGTH = 4
+const MAX_SEQUENCE_LENGTH = 10  # Limit to 10 labels (0-9)
+
+var current_sequence = {
+	1: [],
+	2: []
+}
+
+var player_inputs = {
+	1: [],
+	2: []
+}
+
+var timers = {
+	1: 10.0,
+	2: 10.0
+}
+
+var quotes = [
+	\"Great job!\",
+	\"Keep going!\",
+	\"You're on fire!\",
+	\"Nice move!\",
+]
+
+var voice_lines = [
+	\"res://SFX/FX/VoiceLines/great_job.wav\",
+	\"res://SFX/FX/VoiceLines/keep_going.wav\",
+	\"res://SFX/FX/VoiceLines/nice_move.wav\",
+	\"res://SFX/FX/VoiceLines/youre_on_fire.wav\",
+]
+
+var ViviannaPositiveSprites = [
+	\"res://Art/Character/Vivianna/Vivianna.png\",
+	\"res://Art/Character/Vivianna/ViviannaHappy.png\",
+	\"res://Art/Character/Vivianna/ViviannaLove.png\",
+	\"res://Art/Character/Vivianna/ViviannaWink.png\"
+]
+
+var ViviannaNegativeSprites = [
+	\"res://Art/Character/Vivianna/Negatives/VivAnger.png\",
+	\"res://Art/Character/Vivianna/Negatives/VivBored.png\",
+	\"res://Art/Character/Vivianna/Negatives/VivSick.png\",
+	\"res://Art/Character/Vivianna/Negatives/VivTears.png\",
+	\"res://Art/Character/Vivianna/Negatives/VivUpset.png\",
+]
+
+@onready var vivianna_sprite = $CanvasLayer/Vivianna
+@onready var player1_ui = $CanvasLayer/Player1UI
+@onready var player2_ui = $CanvasLayer/Player2UI
+@onready var combo_label_1 = player1_ui.get_node(\"ComboLabel\")
+@onready var combo_label_2 = player2_ui.get_node(\"ComboLabel\")
+@onready var middle_text_label = $CanvasLayer/MiddleTextPanel/MiddleTextLabel
+@onready var voice_player = $VoicePlayer
+@onready var timer_label = $CanvasLayer/TimerLabel
+
+var game_ended = false  # Flag to check if the game has ended
+var tutorial_timer = 5.0  # 30 seconds for the tutorial
+
+func _ready():
+	randomize()
+	generate_new_sequence()
+	update_ui()
+	middle_text_label.text = \"Completing a Sequence Earns 10 points, 5 correct Sequences earns a Combo increasing points by 2x ,3x, or 4x!\"
+	
+	# Start a countdown timer for 30 seconds
+	await get_tree().create_timer(tutorial_timer).timeout
+	game_ended = true
+
+func _process(delta):
+	if game_ended:
+		return  # Stop processing if the tutorial has ended
+
+	# Update the UI
+	update_ui()
+
+	# Update the tutorial timer
+	if tutorial_timer > 0:
+		tutorial_timer -= delta
+		timer_label.text = str(int(tutorial_timer))
+	else:
+		# Display the final message when time is up
+		middle_text_label.text = \"Tutorial Time's Up! Get ready for the real game! Go Get Her Tigers\"
+		timer_label.text = \"0\"
+		# Stop player input processing
+		game_ended = true
+		# Show the final message
+		await get_tree().create_timer(1.0).timeout  # Wait for 1 second before showing the next message
+		
+		# Wait for 3 seconds before transitioning to the Main Menu
+		await get_tree().create_timer(3.0).timeout  # 3 seconds delay
+		get_tree().change_scene_to_file(\"res://Scenes/MainMenu.tscn\")
+
+func update_ui():
+	update_player_ui(player1_ui, 1, player_inputs[1])
+	update_player_ui(player2_ui, 2, player_inputs[2])
+
+	combo_label_1.text = \"Combo x1\"  # Sandbox, no combos in this tutorial
+	combo_label_2.text = \"Combo x1\"
+
+func update_player_ui(ui_node: Node, player: int, inputs: Array):
+	var sequence_box = ui_node.get_node(\"SequenceBox\")
+	var sequence = current_sequence[player]
+
+	# Limit the sequence to MAX_SEQUENCE_LENGTH to avoid out-of-bounds errors
+	var max_size = min(sequence.size(), MAX_SEQUENCE_LENGTH)
+
+	for i in range(max_size):
+		var texture_rect = sequence_box.get_child(i)
+
+		if i < sequence.size():
+			texture_rect.visible = true
+			var arrow_texture = load(DISPLAY_MAP.get(sequence[i], sequence[i]))  # Load image for the direction
+			texture_rect.texture = arrow_texture
+
+			# Color the texture depending on whether the input matches
+			if i < inputs.size():
+				if inputs[i] == sequence[i]:
+					texture_rect.modulate = Color(0.4, 0.6, 1.0)  # Correct (blue)
+				else:
+					texture_rect.modulate = Color(1.0, 0.2, 0.2)  # Wrong (red)
+			else:
+				texture_rect.modulate = Color(1, 1, 1)  # Default
+		else:
+			texture_rect.visible = false
+
+func _input(event):
+	if event.is_action_pressed(\"ui_cancel\"):  # ESC key to exit tutorial
+		get_tree().change_scene_to_file(\"res://Scenes/MainMenu.tscn\")
+		return
+
+	# Player 1 Inputs
+	if Input.is_action_just_pressed(\"PlayerDPad_A\"):
+		handle_input(1, \"A\")
+	elif Input.is_action_just_pressed(\"PlayerDPad_B\"):
+		handle_input(1, \"B\")
+	elif Input.is_action_just_pressed(\"PlayerDPad_Y\"):
+		handle_input(1, \"Y\")
+	elif Input.is_action_just_pressed(\"PlayerDPad_X\"):
+		handle_input(1, \"X\")
+	
+	# Player 2 Inputs
+	if Input.is_action_just_pressed(\"PlayerFButton_A\"):
+		handle_input(2, \"A\")
+	elif Input.is_action_just_pressed(\"PlayerFButton_B\"):
+		handle_input(2, \"B\")
+	elif Input.is_action_just_pressed(\"PlayerFButton_Y\"):
+		handle_input(2, \"Y\")
+	elif Input.is_action_just_pressed(\"PlayerFButton_X\"):
+		handle_input(2, \"X\")
+
+func handle_input(player, input_str):
+	# Only update if the tutorial is active, no score or time limits
+	player_inputs[player].append(input_str)
+
+	if player_inputs[player].size() == current_sequence[player].size():
+		if player_inputs[player] == current_sequence[player]:
+			update_vivianna_sprite(true)
+			update_middle_text_and_voice_line()
+		else:
+			update_vivianna_sprite(false)
+
+		player_inputs[player].clear()
+		update_ui()
+
+func update_middle_text_and_voice_line():
+	# Randomly select a quote and corresponding voice line
+	var random_index = randi() % quotes.size()
+	var random_quote = quotes[random_index]
+	var voice_line = voice_lines[random_index]
+
+	middle_text_label.text = random_quote
+
+	var voice_stream = load(voice_line)
+	voice_player.stream = voice_stream
+	voice_player.play()
+
+func generate_new_sequence(length := SEQUENCE_LENGTH):
+	# Generate a new sequence of inputs for the tutorial
+	current_sequence[1] = []
+	for i in range(min(length, MAX_SEQUENCE_LENGTH)):  # Ensure sequence length does not exceed max
+		current_sequence[1].append(INPUT_OPTIONS[randi() % INPUT_OPTIONS.size()])
+	current_sequence[2] = current_sequence[1].duplicate()
+
+func update_vivianna_sprite(success: bool):
+	var sprite_list = ViviannaPositiveSprites if success else ViviannaNegativeSprites
+	var random_index = randi() % sprite_list.size()
+	var sprite_path = sprite_list[random_index]
+
+	var sprite_texture = load(sprite_path)
+	vivianna_sprite.texture = sprite_texture
+"
+
+[node name="Node2D" type="Node2D"]
+
+[node name="WpSunset" type="Sprite2D" parent="."]
+position = Vector2(320, 191)
+scale = Vector2(1, 0.8)
+texture = ExtResource("1_dlght")
+
+[node name="Katlyn-base" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(320, 232)
+texture = ExtResource("2_8i65c")
+
+[node name="GameManager" type="Node2D" parent="."]
+script = SubResource("GDScript_hxa32")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="GameManager"]
+
+[node name="Vivianna" type="Sprite2D" parent="GameManager/CanvasLayer"]
+position = Vector2(320, 232)
+texture = ExtResource("4_sgy12")
+
+[node name="Player2UI" type="Panel" parent="GameManager/CanvasLayer"]
+offset_left = 440.0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="TimerLabel" type="Label" parent="GameManager/CanvasLayer/Player2UI"]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("5_5gw1s")
+theme_override_font_sizes/font_size = 16
+
+[node name="ScoreLabel" type="Label" parent="GameManager/CanvasLayer/Player2UI"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 40.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_5gw1s")
+theme_override_font_sizes/font_size = 16
+
+[node name="CorrectSoundPlayer" type="AudioStreamPlayer2D" parent="GameManager/CanvasLayer/Player2UI"]
+stream = ExtResource("6_brn58")
+
+[node name="WrongSoundPlayer" type="AudioStreamPlayer2D" parent="GameManager/CanvasLayer/Player2UI"]
+stream = ExtResource("7_fx2vl")
+
+[node name="SequenceBox" type="GridContainer" parent="GameManager/CanvasLayer/Player2UI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -55.0
+offset_right = 90.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(90, 0)
+columns = 5
+
+[node name="0" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
+layout_mode = 2
+
+[node name="1" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
+layout_mode = 2
+
+[node name="2" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
+layout_mode = 2
+
+[node name="3" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
+layout_mode = 2
+
+[node name="4" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
+layout_mode = 2
+
+[node name="5" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
+layout_mode = 2
+
+[node name="6" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
+layout_mode = 2
+
+[node name="7" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
+layout_mode = 2
+
+[node name="8" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
+layout_mode = 2
+
+[node name="9" type="TextureRect" parent="GameManager/CanvasLayer/Player2UI/SequenceBox"]
+layout_mode = 2
+
+[node name="ComboLabel" type="Label" parent="GameManager/CanvasLayer/Player2UI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("5_5gw1s")
+theme_override_font_sizes/font_size = 12
+
+[node name="Player1UI" type="Panel" parent="GameManager/CanvasLayer"]
+offset_right = 200.0
+offset_bottom = 360.0
+size_flags_horizontal = 8
+
+[node name="TimerLabel" type="Label" parent="GameManager/CanvasLayer/Player1UI"]
+layout_mode = 1
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_fonts/font = ExtResource("5_5gw1s")
+theme_override_font_sizes/font_size = 16
+
+[node name="ScoreLabel" type="Label" parent="GameManager/CanvasLayer/Player1UI"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 40.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("5_5gw1s")
+theme_override_font_sizes/font_size = 16
+
+[node name="CorrectSoundPlayer" type="AudioStreamPlayer2D" parent="GameManager/CanvasLayer/Player1UI"]
+stream = ExtResource("8_mqud2")
+
+[node name="WrongSoundPlayer" type="AudioStreamPlayer2D" parent="GameManager/CanvasLayer/Player1UI"]
+stream = ExtResource("9_sswaw")
+
+[node name="SequenceBox" type="GridContainer" parent="GameManager/CanvasLayer/Player1UI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -55.0
+offset_right = 90.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(90, 0)
+columns = 5
+
+[node name="0" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
+layout_mode = 2
+
+[node name="1" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
+layout_mode = 2
+
+[node name="2" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
+layout_mode = 2
+
+[node name="3" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
+layout_mode = 2
+
+[node name="4" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
+layout_mode = 2
+
+[node name="5" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
+layout_mode = 2
+
+[node name="6" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
+layout_mode = 2
+
+[node name="7" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
+layout_mode = 2
+
+[node name="8" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
+layout_mode = 2
+
+[node name="9" type="TextureRect" parent="GameManager/CanvasLayer/Player1UI/SequenceBox"]
+layout_mode = 2
+
+[node name="ComboLabel" type="Label" parent="GameManager/CanvasLayer/Player1UI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("5_5gw1s")
+theme_override_font_sizes/font_size = 12
+
+[node name="MiddleTextPanel" type="Panel" parent="GameManager/CanvasLayer"]
+offset_left = 205.0
+offset_top = 295.0
+offset_right = 435.0
+offset_bottom = 355.0
+
+[node name="MiddleTextLabel" type="Label" parent="GameManager/CanvasLayer/MiddleTextPanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -105.0
+offset_top = -58.0
+offset_right = 105.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(105, 0)
+theme_override_fonts/font = ExtResource("5_5gw1s")
+theme_override_font_sizes/font_size = 10
+autowrap_mode = 3
+
+[node name="TimerLabel" type="Label" parent="GameManager/CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("5_5gw1s")
+theme_override_font_sizes/font_size = 32
+
+[node name="VoicePlayer" type="AudioStreamPlayer2D" parent="GameManager"]
+
+[node name="AnnouncerPlayer" type="AudioStreamPlayer2D" parent="GameManager"]
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_dlght")
+autoplay = true
+parameters/looping = true
