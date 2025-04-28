@@ -27,8 +27,8 @@ var scores = {
 }
 
 var timers = {
-	1: 10.0,
-	2: 10.0
+	1: 15.0,
+	2: 15.0
 }
 
 var success_counts = {
