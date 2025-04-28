@@ -3,8 +3,17 @@ extends Control
 @onready var player_1_score_label = $CanvasLayer/Player1/Player1ScoreLabel
 @onready var player_2_score_label = $CanvasLayer/Player2/Player2ScoreLabel
 
+@onready var start_button = $CanvasLayer/StartButton
+@onready var credits_button = $CanvasLayer/StartButton3
+@onready var exit_button = $CanvasLayer/StartButton4
+
+var buttons = []
+var selected_index = 0
+
 func _ready():
+	buttons = [start_button, credits_button, exit_button]
 	display_top_scores()
+	_update_button_focus()
 
 func display_top_scores():
 	# Display top 10 scores for Player 1
@@ -23,18 +32,50 @@ func display_top_scores():
 	else:
 		player_2_score_label.text = ""
 
-# Start button handler
+func _process(delta):
+	# Check for navigation input
+	if Input.is_action_just_pressed("ui_down"):
+		_selected_next()
+	elif Input.is_action_just_pressed("ui_up"):
+		_selected_previous()
+	elif Input.is_action_just_pressed("ui_accept"):
+		_activate_selected()
+
+func _selected_next():
+	selected_index += 1
+	if selected_index >= buttons.size():
+		selected_index = 0
+	_update_button_focus()
+
+func _selected_previous():
+	selected_index -= 1
+	if selected_index < 0:
+		selected_index = buttons.size() - 1
+	_update_button_focus()
+
+func _update_button_focus():
+	for i in range(buttons.size()):
+		if i == selected_index:
+			buttons[i].grab_focus()  # visually select this button
+		else:
+			# Optionally, do something to "unhighlight" other buttons if needed
+			pass
+
+func _activate_selected():
+	match selected_index:
+		0:
+			_on_start_button_pressed()
+		1:
+			_on_credits_button_pressed()
+		2:
+			_on_exit_button_pressed()
+
+# Existing button pressed handlers
 func _on_start_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Intermission.tscn")
 
-# Tutorial button handler
-func _on_tutorial_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/Tutorial.tscn")
-
-# Credits button handler
 func _on_credits_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Credits.tscn")
 
-# Exit button handler
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()

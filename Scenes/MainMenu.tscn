@@ -1,16 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://c23g57q8jgjsd"]
+[gd_scene load_steps=7 format=3 uid="uid://c23g57q8jgjsd"]
 
 [ext_resource type="Script" uid="uid://maig4fohrflj" path="res://Scripts/MainMenu.gd" id="1_8saeu"]
+[ext_resource type="Texture2D" uid="uid://cxe8c64elabdj" path="res://Art/Background_1.png" id="1_df05h"]
 [ext_resource type="FontFile" uid="uid://82qj0rpumxrm" path="res://Art/04B_08__.TTF" id="2_853f1"]
-[ext_resource type="Texture2D" uid="uid://bdm23u8e7dcoq" path="res://Art/HomeScreenGradient.png" id="3_8saeu"]
+[ext_resource type="Texture2D" uid="uid://chcol6cojommj" path="res://Art/Panels/220x250Panel.png" id="3_df05h"]
 [ext_resource type="AudioStream" uid="uid://b5ms4uf6womaq" path="res://SFX/OST/Mesmerizer.mp3" id="4_ghw46"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_df05h"]
+texture = ExtResource("3_df05h")
 
 [node name="MainMenu" type="Node2D"]
 
 [node name="HomeScreenGradient" type="Sprite2D" parent="."]
-position = Vector2(320, 180.1)
-scale = Vector2(1, 0.796018)
-texture = ExtResource("3_8saeu")
+position = Vector2(320, 180)
+texture = ExtResource("1_df05h")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -24,6 +27,7 @@ script = ExtResource("1_8saeu")
 [node name="Player1" type="Panel" parent="Control/CanvasLayer"]
 offset_right = 220.0
 offset_bottom = 250.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_df05h")
 
 [node name="Player1ScoreLabel" type="Label" parent="Control/CanvasLayer/Player1"]
 layout_mode = 1
@@ -42,6 +46,7 @@ theme_override_font_sizes/font_size = 12
 offset_left = 420.0
 offset_right = 640.0
 offset_bottom = 250.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_df05h")
 
 [node name="Player2ScoreLabel" type="Label" parent="Control/CanvasLayer/Player2"]
 layout_mode = 1

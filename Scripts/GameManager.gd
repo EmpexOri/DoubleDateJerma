@@ -47,15 +47,27 @@ var combo_multipliers = {
 }
 
 var quotes = [
-	"Great job!",
-	"Keep going!",
-	"You're on fire!",
-	"Nice move!",
+	"Oh wow",
+	"No way",
+	"That's crazy",
+	"Tell me more...",
+	"That's so cool",
+	"That can't be true",
+	"You're kidding",
+	"I'm just ordering another cocktail",
+	"This lobster is amazing btw",
+	"You did that all by yourself?",
 ]
 
 var voice_lines = [
 	"res://SFX/FX/VoiceLines/great_job.wav",
 	"res://SFX/FX/VoiceLines/keep_going.wav",
+	"res://SFX/FX/VoiceLines/nice_move.wav",
+	"res://SFX/FX/VoiceLines/youre_on_fire.wav",
+	"res://SFX/FX/VoiceLines/great_job.wav",
+	"res://SFX/FX/VoiceLines/keep_going.wav",
+	"res://SFX/FX/VoiceLines/nice_move.wav",
+	"res://SFX/FX/VoiceLines/youre_on_fire.wav",
 	"res://SFX/FX/VoiceLines/nice_move.wav",
 	"res://SFX/FX/VoiceLines/youre_on_fire.wav",
 ]
@@ -96,6 +108,7 @@ var game_timer = GAME_TIME_LIMIT  # Game timer initialized to 201 seconds
 var game_ended = false  # Flag to check if the game has ended
 
 func _ready():
+	var music = get_node("CanvasLayer/Music")
 	randomize()
 	generate_new_sequence()
 	update_ui()
@@ -195,6 +208,11 @@ func _input(event):
 		handle_input(2, "Y")
 	elif Input.is_action_just_pressed("PlayerFButton_X"):
 		handle_input(2, "X")
+		
+	# Secret button for Player 1
+	if Input.is_action_just_pressed("SecretButton"):
+		trigger_secret(1)
+		player_inputs[1].clear()
 
 func handle_input(player, input_str):
 	# Ignore inputs if the game's ended
@@ -205,54 +223,50 @@ func handle_input(player, input_str):
 	if timers[player] <= 0:
 		return
 	
+	# Append current input
 	player_inputs[player].append(input_str)
 
-	# Play sound for each input (correct or incorrect)
-	if input_str == current_sequence[player][player_inputs[player].size() - 1]:
+	# Existing correctness check...
+	var current_index = player_inputs[player].size() - 1
+	if input_str == current_sequence[player][current_index]:
 		play_sound(player, "correct")
 	else:
-		play_sound(player, "wrong")
+		fail_sequence(player)
+		return
 
 	if player_inputs[player].size() == current_sequence[player].size():
-		# Sequence complete, check if the entire sequence is correct
-		if player_inputs[player] == current_sequence[player]:
-			# Increase combo count
-			combo_counts[player] += 1
+		# Increase combo count
+		combo_counts[player] += 1
 
-			var prev_multiplier = combo_multipliers[player]
+		var prev_multiplier = combo_multipliers[player]
 
-			# Update combo multiplier based on streak
-			if combo_counts[player] >= 9:
-				combo_multipliers[player] = 4
-			elif combo_counts[player] >= 6:
-				combo_multipliers[player] = 3
-			elif combo_counts[player] >= 3:
-				combo_multipliers[player] = 2
-			else:
-				combo_multipliers[player] = 1
-
-			# If the multiplier increased, play a voice line
-			if combo_multipliers[player] > prev_multiplier:
-				play_combo_voice_line(player)  # Pass the player as an argument
-
-			# Apply score with multiplier
-			scores[player] += 10 * combo_multipliers[player]
-			timers[player] += 2.5  # Bonus time
-			success_counts[player] += 1
-
-			var extra_length = int(success_counts[player] / 5)
-			generate_new_sequence(SEQUENCE_LENGTH + extra_length, player)
-
-			play_sound(player, "correct")
-			update_vivianna_sprite(true)
-			update_middle_text_and_voice_line()
+		# Update combo multiplier based on streak
+		if combo_counts[player] >= 9:
+			combo_multipliers[player] = 4
+		elif combo_counts[player] >= 6:
+			combo_multipliers[player] = 3
+		elif combo_counts[player] >= 3:
+			combo_multipliers[player] = 2
 		else:
-			# Wrong sequence resets combo
-			combo_counts[player] = 0
 			combo_multipliers[player] = 1
 
-			play_sound(player, "wrong")
-			update_vivianna_sprite(false)
+		# If the multiplier increased, play a voice line
+		if combo_multipliers[player] > prev_multiplier:
+			play_combo_voice_line(player)
+
+		# Apply score with multiplier
+		scores[player] += 10 * combo_multipliers[player]
+		timers[player] += 2.5  # Bonus time
+		success_counts[player] += 1
+
+		# Generate next sequence with length increase
+		var extra_length = int(success_counts[player] / 5)
+		generate_new_sequence(SEQUENCE_LENGTH + extra_length, player)
+
+		play_sound(player, "correct")
+		update_vivianna_sprite(true)
+		update_middle_text_and_voice_line()
+		
 		player_inputs[player].clear()
 		update_ui()
 
@@ -311,13 +325,15 @@ func end_game():
 	# Add the scores to the top scores list
 	ScoresManager.add_score(1, scores[1])
 	ScoresManager.add_score(2, scores[2])
+	ScoresManager.current_score_player_1 = scores[1]
+	ScoresManager.current_score_player_2 = scores[2]
 
 	print("Game Over!")
 	update_ui()  # Update the UI with final scores
 
 	# Transition to Main Menu after a short delay
-	await get_tree().create_timer(2.0).timeout
-	get_tree().change_scene_to_file("res://Scenes/MainMenu.tscn")
+	await get_tree().create_timer(1.0).timeout
+	get_tree().change_scene_to_file("res://Scenes/EndScene.tscn")
 	
 func get_combo_color(multiplier: int) -> Color:
 	match multiplier:
@@ -336,6 +352,7 @@ func play_combo_voice_line(player):
 		"res://SFX/FX/Announcer/killfrenzy.mp3",
 		"res://SFX/FX/Announcer/Killimanjaro.mp3",
 		"res://SFX/FX/Announcer/killtrocity.mp3",
+		"res://SFX/FX/Announcer/Bamm, nice.mp3"
 	]
 
 	var random_index = randi() % combo_voice_lines.size()
@@ -353,7 +370,39 @@ func update_vivianna_sprite(success: bool):
 
 	var sprite_texture = load(sprite_path)
 	vivianna_sprite.texture = sprite_texture
+	
+func fail_sequence(player):
+	# Play the wrong sound
+	play_sound(player, "wrong")
+	
+	# Update Vivianna sprite to negative reaction
+	update_vivianna_sprite(false)
+	
+	# Reset combo for player
+	combo_counts[player] = 0
+	combo_multipliers[player] = 1
+	
+	# Clear inputs immediately to block further input until reset
+	player_inputs[player].clear()
+	update_ui()
+	
+	# Wait 0.5 seconds before generating new sequence
+	await get_tree().create_timer(0.0).timeout
+	
+	# Generate a new sequence of default length (or adjusted length)
+	var extra_length = int(success_counts[player] / 5)
+	generate_new_sequence(SEQUENCE_LENGTH + extra_length, player)
+	update_ui()
 
 func round_decimal(value: float, places: int = 1) -> float:
 	var factor = pow(10, places)
 	return round(value * factor) / factor
+
+func trigger_secret(player):
+	var music = get_node("CanvasLayer/Music")
+	if music:
+		music.stop()
+		music.stream = load("res://SFX/OST/M@GICALCURE! LOVE SHOT!.mp3")
+		music.play()
+	else:
+		print("Music node not found")

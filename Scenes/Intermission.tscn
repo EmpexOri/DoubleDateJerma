@@ -1,10 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://t6kikw0dbe12"]
+[gd_scene load_steps=5 format=3 uid="uid://t6kikw0dbe12"]
 
 [ext_resource type="Script" uid="uid://cx61dcpadygku" path="res://Scripts/Intermission.gd" id="1_4nnvh"]
 [ext_resource type="FontFile" uid="uid://82qj0rpumxrm" path="res://Art/04B_08__.TTF" id="1_k0l3i"]
+[ext_resource type="Texture2D" uid="uid://cq06376d5gf0q" path="res://Art/Background_5.png" id="1_uwcvy"]
 [ext_resource type="AudioStream" uid="uid://dwcla4ydvxwwn" path="res://SFX/OST/モニタリングIntermission.mp3" id="3_llvhf"]
 
 [node name="Intermission" type="Node2D"]
+
+[node name="Background5" type="Sprite2D" parent="."]
+position = Vector2(320, 180)
+texture = ExtResource("1_uwcvy")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 script = ExtResource("1_4nnvh")

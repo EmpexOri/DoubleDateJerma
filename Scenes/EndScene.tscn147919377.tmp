@@ -1,43 +1,43 @@
-[gd_scene load_steps=15 format=3 uid="uid://30utc3at4owp"]
+[gd_scene load_steps=15 format=3 uid="uid://xhdkxwmowpxq"]
 
-[ext_resource type="Texture2D" uid="uid://cwboyfi4087pa" path="res://Art/CafeBackgroundFixed.png" id="1_bmxlf"]
-[ext_resource type="Texture2D" uid="uid://vagnyei7uiaw" path="res://Art/Character/Katlyn-Base.png" id="1_r150o"]
-[ext_resource type="Texture2D" uid="uid://d3ly8p6pqcmn5" path="res://Art/Character/Vivianna/Vivianna.png" id="3_bmxlf"]
-[ext_resource type="Script" uid="uid://ci5tfov1n0otd" path="res://Scripts/GameManager.gd" id="3_kln2b"]
-[ext_resource type="FontFile" uid="uid://82qj0rpumxrm" path="res://Art/04B_08__.TTF" id="4_rgh2o"]
-[ext_resource type="Texture2D" uid="uid://dxn60hlufy30s" path="res://Art/Panels/200x160Panel.png" id="5_4kpch"]
-[ext_resource type="AudioStream" uid="uid://wkjk6mi4dxqs" path="res://SFX/FX/correct_player2.wav" id="5_jw32o"]
-[ext_resource type="AudioStream" uid="uid://dowyp57um7kg4" path="res://SFX/FX/wrong_player2.wav" id="6_50glp"]
-[ext_resource type="AudioStream" uid="uid://dcv5o6fhds57v" path="res://SFX/FX/correct_player1.wav" id="7_vy5pj"]
-[ext_resource type="AudioStream" uid="uid://bvsvyotnen0gl" path="res://SFX/FX/wrong_player1.wav" id="8_50glp"]
-[ext_resource type="AudioStream" uid="uid://be7wcljqleyek" path="res://SFX/OST/モニタリング-Gameplay.mp3" id="10_bmxlf"]
-[ext_resource type="Texture2D" uid="uid://co6krura307bp" path="res://Art/Panels/230x60Panel.png" id="11_grg3l"]
+[ext_resource type="Texture2D" uid="uid://cwboyfi4087pa" path="res://Art/CafeBackgroundFixed.png" id="1_f7m51"]
+[ext_resource type="Script" uid="uid://coeqx5d52uhj3" path="res://Scripts/EndGame.gd" id="1_k65nm"]
+[ext_resource type="Texture2D" uid="uid://vagnyei7uiaw" path="res://Art/Character/Katlyn-Base.png" id="2_k65nm"]
+[ext_resource type="Texture2D" uid="uid://d3ly8p6pqcmn5" path="res://Art/Character/Vivianna/Vivianna.png" id="4_b5jnr"]
+[ext_resource type="Texture2D" uid="uid://dxn60hlufy30s" path="res://Art/Panels/200x160Panel.png" id="5_y47l7"]
+[ext_resource type="FontFile" uid="uid://82qj0rpumxrm" path="res://Art/04B_08__.TTF" id="6_peqs5"]
+[ext_resource type="AudioStream" uid="uid://wkjk6mi4dxqs" path="res://SFX/FX/correct_player2.wav" id="7_3jmp8"]
+[ext_resource type="AudioStream" uid="uid://dowyp57um7kg4" path="res://SFX/FX/wrong_player2.wav" id="8_htnuh"]
+[ext_resource type="AudioStream" uid="uid://dcv5o6fhds57v" path="res://SFX/FX/correct_player1.wav" id="9_vd1hk"]
+[ext_resource type="AudioStream" uid="uid://bvsvyotnen0gl" path="res://SFX/FX/wrong_player1.wav" id="10_gtimi"]
+[ext_resource type="Texture2D" uid="uid://co6krura307bp" path="res://Art/Panels/230x60Panel.png" id="11_j3weo"]
+[ext_resource type="AudioStream" uid="uid://be7wcljqleyek" path="res://SFX/OST/モニタリング-Gameplay.mp3" id="12_jvwux"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_grg3l"]
-texture = ExtResource("5_4kpch")
+texture = ExtResource("5_y47l7")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_frkhe"]
-texture = ExtResource("11_grg3l")
+texture = ExtResource("11_j3weo")
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource("1_k65nm")
 
 [node name="Background1" type="Sprite2D" parent="."]
 position = Vector2(320, 180)
-texture = ExtResource("1_bmxlf")
+texture = ExtResource("1_f7m51")
 
 [node name="Katlyn-base" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(320, 232)
-texture = ExtResource("1_r150o")
+texture = ExtResource("2_k65nm")
 
 [node name="GameManager" type="Node2D" parent="."]
-script = ExtResource("3_kln2b")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="GameManager"]
 
 [node name="Vivianna" type="Sprite2D" parent="GameManager/CanvasLayer"]
 position = Vector2(320, 167)
-texture = ExtResource("3_bmxlf")
+texture = ExtResource("4_b5jnr")
 
 [node name="Player2UI" type="Panel" parent="GameManager/CanvasLayer"]
 offset_left = 438.0
@@ -56,7 +56,7 @@ offset_top = 5.0
 offset_right = 20.0
 offset_bottom = 28.0
 grow_horizontal = 2
-theme_override_fonts/font = ExtResource("4_rgh2o")
+theme_override_fonts/font = ExtResource("6_peqs5")
 theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -71,15 +71,15 @@ offset_top = -40.0
 offset_right = 87.0
 offset_bottom = 10.0
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("4_rgh2o")
+theme_override_fonts/font = ExtResource("6_peqs5")
 theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="CorrectSoundPlayer" type="AudioStreamPlayer2D" parent="GameManager/CanvasLayer/Player2UI"]
-stream = ExtResource("5_jw32o")
+stream = ExtResource("7_3jmp8")
 
 [node name="WrongSoundPlayer" type="AudioStreamPlayer2D" parent="GameManager/CanvasLayer/Player2UI"]
-stream = ExtResource("6_50glp")
+stream = ExtResource("8_htnuh")
 
 [node name="SequenceBox" type="GridContainer" parent="GameManager/CanvasLayer/Player2UI"]
 layout_mode = 1
@@ -147,7 +147,7 @@ offset_top = 40.0
 offset_right = -7.0
 offset_bottom = 65.0
 grow_horizontal = 0
-theme_override_fonts/font = ExtResource("4_rgh2o")
+theme_override_fonts/font = ExtResource("6_peqs5")
 theme_override_font_sizes/font_size = 16
 
 [node name="Player1UI" type="Panel" parent="GameManager/CanvasLayer"]
@@ -168,7 +168,7 @@ offset_top = 5.0
 offset_right = 20.0
 offset_bottom = 28.0
 grow_horizontal = 2
-theme_override_fonts/font = ExtResource("4_rgh2o")
+theme_override_fonts/font = ExtResource("6_peqs5")
 theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -183,15 +183,15 @@ offset_top = -40.0
 offset_right = 87.0
 offset_bottom = 10.0
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("4_rgh2o")
+theme_override_fonts/font = ExtResource("6_peqs5")
 theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="CorrectSoundPlayer" type="AudioStreamPlayer2D" parent="GameManager/CanvasLayer/Player1UI"]
-stream = ExtResource("7_vy5pj")
+stream = ExtResource("9_vd1hk")
 
 [node name="WrongSoundPlayer" type="AudioStreamPlayer2D" parent="GameManager/CanvasLayer/Player1UI"]
-stream = ExtResource("8_50glp")
+stream = ExtResource("10_gtimi")
 
 [node name="SequenceBox" type="GridContainer" parent="GameManager/CanvasLayer/Player1UI"]
 layout_mode = 1
@@ -249,7 +249,7 @@ offset_top = 40.0
 offset_right = -7.0
 offset_bottom = 65.0
 grow_horizontal = 0
-theme_override_fonts/font = ExtResource("4_rgh2o")
+theme_override_fonts/font = ExtResource("6_peqs5")
 theme_override_font_sizes/font_size = 16
 
 [node name="MiddleTextPanel" type="Panel" parent="GameManager/CanvasLayer"]
@@ -273,18 +273,16 @@ offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 0
 pivot_offset = Vector2(105, 0)
-theme_override_fonts/font = ExtResource("4_rgh2o")
+theme_override_fonts/font = ExtResource("6_peqs5")
 theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Music" type="AudioStreamPlayer2D" parent="GameManager/CanvasLayer"]
-stream = ExtResource("10_bmxlf")
-volume_db = -2.5
-autoplay = true
-parameters/looping = true
-
 [node name="VoicePlayer" type="AudioStreamPlayer2D" parent="GameManager"]
 
 [node name="AnnouncerPlayer" type="AudioStreamPlayer2D" parent="GameManager"]
-volume_db = 5.0
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_jvwux")
+autoplay = true
+parameters/looping = true

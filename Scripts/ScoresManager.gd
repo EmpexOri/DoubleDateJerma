@@ -3,11 +3,13 @@ extends Node
 var top_scores_player_1 = []
 var top_scores_player_2 = []
 
+var current_score_player_1 = 0
+var current_score_player_2 = 0
+
 const MAX_SCORES = 10
 const SCORE_FILE = "user://scores.dat"
 
 func _ready():
-	# Load the scores from the file when the game starts
 	load_scores()
 
 func save_scores():
@@ -32,12 +34,16 @@ func add_score(player: int, score: int):
 	if player == 1:
 		top_scores_player_1.append(score)
 		top_scores_player_1.sort()
-		top_scores_player_1.reverse()  # Highest score first
-		top_scores_player_1 = top_scores_player_1.slice(0, MAX_SCORES)  # Keep only the top 10
+		top_scores_player_1.reverse()
+		top_scores_player_1 = top_scores_player_1.slice(0, MAX_SCORES)
 	elif player == 2:
 		top_scores_player_2.append(score)
 		top_scores_player_2.sort()
-		top_scores_player_2.reverse()  # Highest score first
-		top_scores_player_2 = top_scores_player_2.slice(0, MAX_SCORES)  # Keep only the top 10
+		top_scores_player_2.reverse()
+		top_scores_player_2 = top_scores_player_2.slice(0, MAX_SCORES)
 
 	save_scores()
+
+func reset_current_scores():
+	current_score_player_1 = 0
+	current_score_player_2 = 0
