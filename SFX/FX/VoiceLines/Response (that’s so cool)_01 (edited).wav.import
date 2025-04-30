@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dub8u2tm8je4c"
+path="res://.godot/imported/Response (that’s so cool)_01 (edited).wav-c51a8dffe4af854e9d3c0b03dab27f63.sample"
+
+[deps]
+
+source_file="res://SFX/FX/VoiceLines/Response (that’s so cool)_01 (edited).wav"
+dest_files=["res://.godot/imported/Response (that’s so cool)_01 (edited).wav-c51a8dffe4af854e9d3c0b03dab27f63.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

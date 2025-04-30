@@ -138,4 +138,4 @@ parameters/looping = true
 [connection signal="pressed" from="Control/CanvasLayer/StartButton" to="Control" method="_on_start_button_pressed"]
 [connection signal="pressed" from="Control/CanvasLayer/StartButton3" to="Control" method="_on_credits_button_pressed"]
 [connection signal="pressed" from="Control/CanvasLayer/StartButton4" to="Control" method="_on_exit_button_pressed"]
-[connection signal="toggled" from="Control/CanvasLayer/DateVoiceToggle" to="Control" method="_on_DateVoiceToggle_toggled"]
+[connection signal="pressed" from="Control/CanvasLayer/DateVoiceToggle" to="Control" method="_on_check_button_pressed"]

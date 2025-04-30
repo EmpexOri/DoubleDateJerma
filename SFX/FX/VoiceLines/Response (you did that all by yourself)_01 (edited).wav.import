@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://2430ko7gt27h"
+path="res://.godot/imported/Response (you did that all by yourself)_01 (edited).wav-d9526b4cfa26d2a0ff002327713b5b20.sample"
+
+[deps]
+
+source_file="res://SFX/FX/VoiceLines/Response (you did that all by yourself)_01 (edited).wav"
+dest_files=["res://.godot/imported/Response (you did that all by yourself)_01 (edited).wav-d9526b4cfa26d2a0ff002327713b5b20.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

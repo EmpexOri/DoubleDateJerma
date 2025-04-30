@@ -13,11 +13,12 @@ config_version=5
 config/name="DoubleDateJerma"
 run/main_scene="uid://dujma8llobgjr"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://dgg0be3ccroof"
 
 [autoload]
 
 ScoresManager="*res://Scripts/ScoresManager.gd"
+GlobalSettings="*res://Scripts/GlobalSettings.gd"
 
 [display]
 

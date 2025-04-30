@@ -7,11 +7,13 @@ extends Control
 @onready var credits_button = $CanvasLayer/StartButton3
 @onready var exit_button = $CanvasLayer/StartButton4
 
+@onready var toggle = $CanvasLayer/DateVoiceToggle
+
 var buttons = []
 var selected_index = 0
 
 func _ready():
-	buttons = [start_button, credits_button, exit_button]
+	buttons = [start_button, credits_button, exit_button, toggle]
 	display_top_scores()
 	_update_button_focus()
 
@@ -79,3 +81,7 @@ func _on_credits_button_pressed() -> void:
 
 func _on_exit_button_pressed() -> void:
 	get_tree().quit()
+
+func _on_DateVoiceToggle_toggled(button_pressed: bool) -> void:
+	GlobalSettings.date_voice_lines_enabled = button_pressed
+	print("Date Voice Lines Enabled:", button_pressed)

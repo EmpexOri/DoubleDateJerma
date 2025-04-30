@@ -60,16 +60,16 @@ var quotes = [
 ]
 
 var voice_lines = [
-	"res://SFX/FX/VoiceLines/great_job.wav",
-	"res://SFX/FX/VoiceLines/keep_going.wav",
-	"res://SFX/FX/VoiceLines/nice_move.wav",
-	"res://SFX/FX/VoiceLines/youre_on_fire.wav",
-	"res://SFX/FX/VoiceLines/great_job.wav",
-	"res://SFX/FX/VoiceLines/keep_going.wav",
-	"res://SFX/FX/VoiceLines/nice_move.wav",
-	"res://SFX/FX/VoiceLines/youre_on_fire.wav",
-	"res://SFX/FX/VoiceLines/nice_move.wav",
-	"res://SFX/FX/VoiceLines/youre_on_fire.wav",
+	"res://SFX/FX/VoiceLines/Response (oh wow)_01 (edited).wav",
+	"res://SFX/FX/VoiceLines/Response (no way)_01 (edited).wav",
+	"res://SFX/FX/VoiceLines/Response (that’s crazy)_01 (edited).wav",
+	"res://SFX/FX/VoiceLines/Response (tell me more)_01 (edited).wav",
+	"res://SFX/FX/VoiceLines/Response (that’s so cool)_01 (edited).wav",
+	"res://SFX/FX/VoiceLines/Response (that can’t be true)_01 (edited).wav",
+	"res://SFX/FX/VoiceLines/Response (you’re kidding)_01 (edited).wav",
+	"res://SFX/FX/VoiceLines/Response (another cocktail)_01 (edited).wav",
+	"res://SFX/FX/VoiceLines/Response (lobster)_01 (edited).wav",
+	"res://SFX/FX/VoiceLines/Response (you did that all by yourself)_01 (edited).wav",
 ]
 
 var ViviannaPositiveSprites = [
@@ -296,9 +296,10 @@ func update_middle_text_and_voice_line():
 	middle_text_label.text = random_quote
 
 	# Load the corresponding voice line dynamically
-	var voice_stream = load(voice_line)
-	voice_player.stream = voice_stream
-	voice_player.play()
+	if GlobalSettings.date_voice_lines_enabled:
+		var voice_stream = load(voice_line)
+		voice_player.stream = voice_stream
+		voice_player.play()
 
 func generate_new_sequence(length := SEQUENCE_LENGTH, player : int = -1):
 	if player != -1:

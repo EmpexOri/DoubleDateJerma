@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b8k3jss25k7td"
+path="res://.godot/imported/Response (no way)_01 (edited).wav-69b71a9b003f096476c55183229802d2.sample"
+
+[deps]
+
+source_file="res://SFX/FX/VoiceLines/Response (no way)_01 (edited).wav"
+dest_files=["res://.godot/imported/Response (no way)_01 (edited).wav-69b71a9b003f096476c55183229802d2.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
